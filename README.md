@@ -10,16 +10,18 @@ for the backend interface, `src/dockops/benchmark.py` for the evaluation.
 
 ## Status
 
-- **Real and tested:** ligand SMILES → 3D embedding (RDKit ETKDG + MMFF),
-  batch pipeline, FastAPI job service, benchmark metrics (ROC-AUC,
-  enrichment factor), provenance manifests, Snakemake DAG, tests.
+- **Real and tested:** ligand SMILES → 3D embedding (RDKit ETKDG + MMFF) →
+  PDBQT (Meeko), batch pipeline, FastAPI job service, benchmark metrics
+  (ROC-AUC, enrichment factor), provenance manifests, Snakemake DAG, tests.
 - **Deterministic mock engine:** `MockEngine` produces stable pseudo-scores
   seeded by input hash so the whole system runs end-to-end without a docking
   binary. Scores from it are pipeline-mechanics demonstrations, **not**
   docking results, and are labeled `engine: "mock"` everywhere they appear.
-- **Stubbed:** `VinaEngine` (AutoDock Vina backend) and receptor preparation
-  — see `docs/engine-setup.md`. Benchmark dataset download — see
-  `docs/datasources.md`.
+- **Implemented, needs an environment:** `VinaEngine` is real code (ligand
+  prep → maps → dock → affinity) but `vina` has no macOS arm64 wheel — it
+  runs in the Dockerfile/Linux or conda-forge; a receptor PDBQT + box config
+  are still needed (see `docs/engine-setup.md`). Benchmark dataset download
+  remains a stub — see `docs/datasources.md`.
 
 ## Why
 

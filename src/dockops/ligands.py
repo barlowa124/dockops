@@ -1,8 +1,7 @@
-"""Ligand preparation: SMILES -> 3D conformer.
+"""Ligand preparation: SMILES -> 3D conformer -> PDBQT.
 
-Implemented: RDKit ETKDG embedding + MMFF94 minimization -> SDF block.
-TODO: PDBQT conversion via meeko (or Open Babel) for the Vina backend —
-see docs/engine-setup.md.
+RDKit ETKDG embedding + MMFF94 minimization, then Meeko for the PDBQT
+conversion Vina needs (install extra: dockops[vina]).
 """
 
 from __future__ import annotations
@@ -31,12 +30,21 @@ def to_sdf(smiles: str, seed: int = 0) -> str | None:
     return Chem.MolToMolBlock(mol) if mol is not None else None
 
 
-def to_pdbqt(smiles: str, seed: int = 0) -> str:
-    """TODO: 3D mol -> PDBQT via meeko MoleculePreparation.
-
-    Raises until the meeko dependency (pip extra: dockops[vina]) and the
-    conversion are implemented; the mock engine does not need PDBQT.
-    """
-    raise NotImplementedError(
-        "PDBQT conversion requires meeko — see docs/engine-setup.md"
-    )
+def to_pdbqt(smiles: str, seed: int = 0) -> str | None:
+    """3D-embedded mol -> PDBQT string via meeko; None on failure."""
+    try:
+        from meeko import MoleculePreparation, PDBQTWriterLegacy
+    except ImportError as e:
+        raise RuntimeError(
+            "meeko not installed — pip install .[vina] "
+            "(see docs/engine-setup.md)"
+        ) from e
+    mol = embed_smiles(smiles, seed=seed)
+    if mol is None:
+        return None
+    setups = MoleculePreparation().prepare(mol)
+    if not setups:
+        return None
+    out = PDBQTWriterLegacy.write_string(setups[0])
+    pdbqt = out[0] if isinstance(out, tuple) else out
+    return pdbqt or None

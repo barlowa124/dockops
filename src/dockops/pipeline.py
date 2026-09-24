@@ -27,7 +27,7 @@ def run_batch(
     config_path: str = "config/config.yaml",
 ) -> pd.DataFrame:
     cfg = load_config(config_path)
-    engine = get_engine(cfg.get("engine", "mock"))
+    engine = get_engine(cfg.get("engine", "mock"), **cfg.get("engine_params", {}))
     target = get_target(target_name, config_path)
 
     ligands = pd.read_csv(ligands_csv)

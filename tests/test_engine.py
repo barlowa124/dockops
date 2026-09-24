@@ -39,5 +39,6 @@ def test_vina_engine_guards_missing_backend():
         engine = get_engine("vina")
     except RuntimeError:
         return  # vina not installed: guard fired as designed
-    with pytest.raises(NotImplementedError):
-        engine.dock("CCO", TARGET)
+    res = engine.dock("CCO", TARGET)  # receptor file absent -> honest error
+    assert res.status == "error"
+    assert res.score is None

@@ -1,4 +1,7 @@
 engine: "mock"            # mock | vina
+engine_params:            # passed to the engine constructor (vina only)
+  exhaustiveness: 8
+  seed: 0
 
 targets:
   demo_target:
