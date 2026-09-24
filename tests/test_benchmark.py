@@ -26,4 +26,6 @@ def test_enrichment_factor():
 def test_enrichment_factor_no_actives():
     scores = np.arange(5, dtype=float)
     labels = np.zeros(5, dtype=int)
-    assert np.isnan(enrichment_factor(scores, labels, 0.2))
+    # zero prevalence is undefined, reported as null so metrics.json
+    # stays valid strict JSON (NaN literals are not)
+    assert enrichment_factor(scores, labels, 0.2) is None

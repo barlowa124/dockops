@@ -30,8 +30,10 @@ def records(pdb_path: str, kinds: tuple[str, ...] = ("ATOM",)):
         for line in f:
             if line.startswith("ENDMDL"):
                 return
-            if not line.startswith(kinds):
+            # need through the Z-coordinate column (54) to be usable
+            if not line.startswith(kinds) or len(line) < 54:
                 continue
+            bf = line[B_FACTOR]
             yield {
                 "atom": line[ATOM_NAME].strip(),
                 "resname": line[RES_NAME].strip(),
@@ -44,7 +46,8 @@ def records(pdb_path: str, kinds: tuple[str, ...] = ("ATOM",)):
                         float(line[Z]),
                     ]
                 ),
-                "bfactor": float(line[B_FACTOR]),
+                # truncated records may lack a B-factor column
+                "bfactor": float(bf) if bf.strip() else float("nan"),
             }
 
 

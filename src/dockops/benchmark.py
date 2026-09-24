@@ -25,7 +25,7 @@ def roc_auc(scores: np.ndarray, labels: np.ndarray) -> float:
 
 def enrichment_factor(
     scores: np.ndarray, labels: np.ndarray, fraction: float = 0.01
-) -> float:
+) -> float | None:
     """EF at top `fraction` of ranked list (lower score = ranked earlier)."""
     scores = np.asarray(scores, dtype=float)
     labels = np.asarray(labels)
@@ -34,7 +34,7 @@ def enrichment_factor(
     top = labels[np.argsort(scores)[:k]]
     prevalence = labels.mean()
     if prevalence == 0:
-        return float("nan")
+        return None
     return float((top.sum() / k) / prevalence)
 
 
@@ -51,7 +51,8 @@ def evaluate(scores_csv: str, ligands_csv: str, metrics_out: str) -> dict:
     y = ok[label_col].astype(int).to_numpy()
     s = ok["score"].astype(float).to_numpy()
 
-    engine = ok["engine"].iloc[0] if len(ok) else "unknown"
+    engines = ok["engine"].unique()
+    engine = engines[0] if len(engines) == 1 else "mixed"
     metrics = {
         "engine": engine,
         "mock_mode": engine == "mock",

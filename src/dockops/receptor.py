@@ -12,15 +12,25 @@ from dockops.pdb import records
 
 
 def ligand_atoms(pdb_path: str, resname: str) -> list[tuple[float, float, float]]:
-    """3D coordinates of all HETATM atoms belonging to resname."""
-    coords = [
-        tuple(r["coords"])
-        for r in records(pdb_path, kinds=("HETATM",))
-        if r["resname"] == resname
+    """3D coordinates of all HETATM atoms belonging to resname.
+
+    A resname present at multiple sites (multiple chains or residue
+    numbers) is ambiguous for box derivation — refuse rather than span
+    a box across separate binding sites.
+    """
+    hits = [
+        r for r in records(pdb_path, kinds=("HETATM",)) if r["resname"] == resname
     ]
-    if not coords:
+    if not hits:
         raise ValueError(f"no HETATM atoms for resname {resname!r} in {pdb_path}")
-    return coords
+    sites = {(r["chain"], r["resseq"]) for r in hits}
+    if len(sites) > 1:
+        raise ValueError(
+            f"{resname!r} found at {len(sites)} sites {sorted(sites)} in "
+            f"{pdb_path} — docking box would span multiple sites; "
+            "trim the receptor or pick a site explicitly"
+        )
+    return [tuple(r["coords"]) for r in hits]
 
 
 def box_from_ligand(

@@ -63,6 +63,9 @@ def plddt_stats(pdb_path: str) -> dict:
     if not p:
         raise ValueError(f"no CA atoms in {pdb_path} — not a protein PDB?")
     vals = np.array(list(p.values()))
+    vals = vals[~np.isnan(vals)]
+    if not len(vals):
+        raise ValueError(f"no B-factor (pLDDT) values in {pdb_path}")
     return {
         "n_residues": len(p),
         "mean_plddt": round(float(vals.mean()), 2),
