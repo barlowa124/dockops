@@ -19,7 +19,7 @@ targets:
 fetch:                          # .venv/bin/python -m dockops.fetch
   dude_target: "egfr"
   receptor_pdb_id: "1M17"
-  uniprot: "P00533"              # human EGFR — AFDB model for structure_qc
+  uniprot: "P00533"              # human EGFR, AFDB model for structure_qc
   max_decoys: 3000               # DUD-E egfr ships ~15k decoys; subsample for runtime
   seed: 0
 

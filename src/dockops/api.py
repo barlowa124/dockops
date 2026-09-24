@@ -4,7 +4,7 @@ POST /jobs {smiles, target} -> runs the configured engine, returns the
 DockResult plus a provenance block. GET /jobs/{id} retrieves past results.
 GET /targets lists configured targets.
 
-State is in-memory — this is a single-process demonstration service, not a
+State is in-memory. This is a single-process demonstration service, not a
 production queue.
 """
 

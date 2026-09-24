@@ -1,6 +1,6 @@
 """Minimal OpenMM mechanics: implicit-solvent minimization + short NVT.
 
-A mechanics check, not a production simulation — amber14 + GBn2 implicit
+A mechanics check, not a production simulation. It uses amber14 + GBn2 implicit
 solvent, picoseconds not microseconds. What it demonstrates is real: force
 field setup, integrator, energy minimization, trajectory-energy drift, and
 RMSD vs the starting geometry.

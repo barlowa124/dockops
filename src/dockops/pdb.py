@@ -1,7 +1,7 @@
 """Shared PDB fixed-width column parsing.
 
 PDB ATOM/HETATM records are column-format; the slice offsets are
-constants of the format spec, not tunable values — named once here so
+constants of the format spec, not tunable values, named once here so
 callers don't each hardcode the same slices.
 """
 
@@ -23,8 +23,8 @@ B_FACTOR = slice(60, 66)
 def records(pdb_path: str, kinds: tuple[str, ...] = ("ATOM",)):
     """Yield parsed field tuples for ATOM/HETATM lines.
 
-    Stops at the first ENDMDL — for NMR ensembles only MODEL 1 is used,
-    matching the fixture convention rather than silently mixing models.
+    Stops at the first ENDMDL. For NMR ensembles only MODEL 1 is used,
+    matching the fixture convention instead of silently mixing models.
     """
     with open(pdb_path) as f:
         for line in f:

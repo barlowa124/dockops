@@ -1,11 +1,11 @@
 """Fetch a real benchmark target: DUD-E actives/decoys + RCSB receptor.
 
 DUD-E (dude.docking.org) ships per-target `actives_final.ism` /
-`decoys_final.ism` files — "SMILES CHEMBLID" per line. The receptor is a
+`decoys_final.ism` files with "SMILES CHEMBLID" per line. The receptor is a
 co-crystallized PDB from RCSB; the docking box is derived from its ligand
 at target-resolution time (see receptor.box_from_ligand).
 
-Not part of the default DAG — run once to stage real inputs:
+Not part of the default DAG. Run once to stage real inputs:
 
     .venv/bin/python -m dockops.fetch
 

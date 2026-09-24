@@ -5,8 +5,8 @@ with fake physics: deterministic pseudo-scores seeded by (smiles, target),
 used so the pipeline, API, and tests run without a docking binary. Its scores
 are labeled engine="mock" everywhere and must never be presented as docking
 results. VinaEngine is the real backend (meeko ligand prep + Vina scoring);
-it needs the `vina`/`meeko` packages and a prepared receptor PDBQT —
-see docs/engine-setup.md.
+it needs the `vina`/`meeko` packages and a prepared receptor PDBQT.
+See docs/engine-setup.md.
 """
 
 from __future__ import annotations
@@ -35,7 +35,7 @@ class DockingEngine(Protocol):
 class MockEngine:
     """Deterministic pseudo-scores in a plausible Vina range (-12..-3).
 
-    Score is derived from sha256(smiles|target|engine) — stable across runs,
+    Score is derived from sha256(smiles|target|engine), stable across runs,
     meaningless as physics.
     """
 
@@ -55,7 +55,7 @@ class VinaEngine:
     """AutoDock Vina backend.
 
     Requires the `vina` and `meeko` packages (pip install .[vina]; vina ships
-    no macOS arm64 wheel — use the Dockerfile or conda-forge on Macs). The
+    no macOS arm64 wheel, so use the Dockerfile or conda-forge on Macs). The
     receptor PDBQT must exist at target.receptor_pdbqt; ligand prep is
     SMILES -> RDKit 3D -> meeko PDBQT per call.
     """
@@ -67,7 +67,7 @@ class VinaEngine:
             import vina  # noqa: F401
         except ImportError as e:
             raise RuntimeError(
-                "vina package not installed — see docs/engine-setup.md"
+                "vina package not installed, see docs/engine-setup.md"
             ) from e
         self.exhaustiveness = exhaustiveness
         self.seed = seed

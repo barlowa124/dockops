@@ -3,10 +3,10 @@
 For each mutation, the WT residue at that position is masked and the model
 predicts a distribution over amino acids; the score is
 log p(mutant) - log p(wildtype). Negative = disfavored vs WT. This is the
-standard zero-shot variant-effect technique (ESM-1v lineage) — variant
+standard zero-shot variant-effect technique (ESM-1v lineage), variant
 prioritization, not de-novo design.
 
-Model: facebook/esm2_t6_8M_UR50D (8M params) — CPU-feasible, downloaded
+Model: facebook/esm2_t6_8M_UR50D (8M params), CPU-feasible, downloaded
 once by huggingface on first use.
 """
 
@@ -20,7 +20,7 @@ AA = "ACDEFGHIKLMNPQRSTVWY"
 
 
 def mutation_score(logprobs, wt_id: int, mut_id: int) -> float:
-    """log p(mut) - log p(wt) at a position. Pure function — testable."""
+    """log p(mut) - log p(wt) at a position. Pure function, testable."""
     return float(logprobs[mut_id] - logprobs[wt_id])
 
 

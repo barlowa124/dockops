@@ -63,7 +63,7 @@ def evaluate(scores_csv: str, ligands_csv: str, metrics_out: str) -> dict:
             f"ef@{int(f * 100)}%": enrichment_factor(s, y, f)
             for f in cfg["benchmark"]["ef_fractions"]
         },
-        "note": "mock engine — mechanics demo, not a docking result"
+        "note": "mock engine, mechanics demo, not a docking result"
         if engine == "mock"
         else "real backend",
     }

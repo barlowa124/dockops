@@ -2,7 +2,7 @@
 
 Records git commit + dirty flag, package versions, SHA-256 of inputs and
 config, engine name, and UTC timestamp. The manifest is written next to the
-outputs and embedded in API responses — it is part of the result, not a log.
+outputs and embedded in API responses. It is part of the result, not a log.
 """
 
 from __future__ import annotations

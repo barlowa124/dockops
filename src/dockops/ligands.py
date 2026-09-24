@@ -38,7 +38,7 @@ def to_pdbqt(smiles: str, seed: int = 0) -> str | None:
         from meeko import MoleculePreparation, PDBQTWriterLegacy
     except ImportError as e:
         raise RuntimeError(
-            "meeko not installed — pip install .[vina] "
+            "meeko not installed, pip install .[vina] "
             "(see docs/engine-setup.md)"
         ) from e
     mol = embed_smiles(smiles, seed=seed)

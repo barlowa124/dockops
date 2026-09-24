@@ -9,9 +9,9 @@ the run provenance; do not report enrichment on the bundled fixture.
 
 ## DUD-E
 
-- `dude.docking.org` — ~102 targets, each with actives + property-matched
+- `dude.docking.org`, ~102 targets, each with actives + property-matched
   decoys. The classic virtual-screening benchmark; known decoy biases are
-  documented in the literature — mention them if DUD-E numbers are reported.
+  documented in the literature, so mention them if DUD-E numbers are reported.
 - Per-target bundles include receptor + co-crystallized ligand for box
   definition.
 
@@ -28,5 +28,5 @@ the run provenance; do not report enrichment on the bundled fixture.
 
 ## Ligand libraries (optional, for scale demos)
 
-- ZINC (zinc.docking.org) purchasable subsets; Enamine REAL is huge — start
+- ZINC (zinc.docking.org) purchasable subsets; Enamine REAL is huge, so start
   with a small ZINC lead-like tranche if a throughput demo is wanted.

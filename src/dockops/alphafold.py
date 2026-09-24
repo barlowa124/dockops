@@ -8,7 +8,7 @@ column. This module:
     shared residue numbering (Kabsch, numpy)
 
 Rigid docking against a predicted structure is only defensible in
-high-confidence regions — that's the QC question this answers.
+high-confidence regions, which is the QC question this answers.
 """
 
 from __future__ import annotations
@@ -61,7 +61,7 @@ CA_CLOSE_A = 2.0
 def plddt_stats(pdb_path: str) -> dict:
     p = plddt_by_residue(pdb_path)
     if not p:
-        raise ValueError(f"no CA atoms in {pdb_path} — not a protein PDB?")
+        raise ValueError(f"no CA atoms in {pdb_path}, not a protein PDB?")
     vals = np.array(list(p.values()))
     vals = vals[~np.isnan(vals)]
     if not len(vals):
@@ -138,7 +138,7 @@ def ca_rmsd(pdb_a: str, pdb_b: str) -> dict:
     ]
     if len(pairs) < 10:
         raise ValueError(
-            f"only {len(pairs)} residue-identity pairs (offset {d}) — "
+            f"only {len(pairs)} residue-identity pairs (offset {d}), "
             "structures may not be the same protein"
         )
     a = np.stack([ca_a[r][1] for r, _ in pairs])

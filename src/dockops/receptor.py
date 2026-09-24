@@ -1,5 +1,5 @@
 """Receptor-side helpers: derive the search-space box from a co-crystallized
-ligand rather than hand-typed coordinates.
+ligand instead of hand-typed coordinates.
 
 Docking boxes in published benchmarks are almost always defined around the
 bound ligand; encoding that derivation in code removes an unverifiable
@@ -15,7 +15,7 @@ def ligand_atoms(pdb_path: str, resname: str) -> list[tuple[float, float, float]
     """3D coordinates of all HETATM atoms belonging to resname.
 
     A resname present at multiple sites (multiple chains or residue
-    numbers) is ambiguous for box derivation — refuse rather than span
+    numbers) is ambiguous for box derivation, so refuse instead of spanning
     a box across separate binding sites.
     """
     hits = [
@@ -27,7 +27,7 @@ def ligand_atoms(pdb_path: str, resname: str) -> list[tuple[float, float, float]
     if len(sites) > 1:
         raise ValueError(
             f"{resname!r} found at {len(sites)} sites {sorted(sites)} in "
-            f"{pdb_path} — docking box would span multiple sites; "
+            f"{pdb_path}, a docking box would span multiple sites; "
             "trim the receptor or pick a site explicitly"
         )
     return [tuple(r["coords"]) for r in hits]
