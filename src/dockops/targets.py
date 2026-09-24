@@ -26,11 +26,21 @@ def get_target(name: str, config_path: str = "config/config.yaml") -> TargetSpec
     if name not in targets:
         raise KeyError(f"unknown target: {name!r} (known: {sorted(targets)})")
     t = targets[name]
+    if "box_from_ligand" in t:
+        from dockops.receptor import box_from_ligand
+
+        center, size = box_from_ligand(
+            t["receptor_pdb"],
+            t["box_from_ligand"],
+            t.get("box_padding", 5.0),
+        )
+    else:
+        center, size = tuple(t["box_center"]), tuple(t["box_size"])
     return TargetSpec(
         name=name,
-        receptor_pdbqt=t["receptor_pdbqt"],
-        box_center=tuple(t["box_center"]),
-        box_size=tuple(t["box_size"]),
+        receptor_pdbqt=t.get("receptor_pdbqt") or t.get("receptor_pdb", ""),
+        box_center=center,
+        box_size=size,
         description=t.get("description", ""),
     )
 
