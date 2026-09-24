@@ -49,3 +49,18 @@ class ReceptorTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_multi_site_resname_rejected(self):
+        import unittest
+        # same resname at two different (chain, resseq) sites -> ambiguous box
+        pdb = (
+            _het(1, "LIG", 10.0, 20.0, 30.0)
+            + _het(2, "LIG", 11.0, 20.0, 30.0)
+            + f"HETATM{3:5d}  C1  {'LIG':>3s} A   9    "
+              f"{50.0:8.3f}{50.0:8.3f}{50.0:8.3f}  1.00 20.00           C\n"
+        )
+        tmp = tempfile.NamedTemporaryFile("w", suffix=".pdb", delete=False)
+        tmp.write(pdb)
+        tmp.close()
+        with self.assertRaises(ValueError):
+            ligand_atoms(tmp.name, "LIG")

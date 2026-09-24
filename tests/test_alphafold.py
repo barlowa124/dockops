@@ -73,3 +73,19 @@ class AlphaFoldTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+    def test_plddt_stats_rejects_no_ca(self):
+        with self.assertRaises(ValueError):
+            plddt_stats(_pdb([
+                "ATOM      1  N   ALA A   1       0.000   0.000   0.000  1.00 20.00           N\n"
+            ]))
+
+    def test_plddt_stats_filters_nan_bfactor(self):
+        # truncated record: coords present, B-factor column empty
+        short = (
+            "ATOM      1  CA  ALA A   1       0.000   0.000   0.000\n"
+        )
+        good = _atom(2, 2, 1.0, 0.0, 0.0, 80.0)
+        stats = plddt_stats(_pdb([short, good]))
+        assert stats["n_residues"] == 2
+        assert stats["mean_plddt"] == 80.0
