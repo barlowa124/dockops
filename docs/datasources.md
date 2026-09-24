@@ -1,5 +1,8 @@
 # Benchmark data sources
 
+`dockops.fetch` implements the DUD-E + RCSB path below for the `egfr`
+target (see `fetch:` in config). This doc lists the broader options.
+
 Public actives-vs-decoys benchmarks for evaluating a docking backend once
 `VinaEngine` lands. Record the dataset name, version, and download date in
 the run provenance; do not report enrichment on the bundled fixture.
