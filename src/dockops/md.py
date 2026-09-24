@@ -73,7 +73,7 @@ def _prepare(pdb_path: str):
 
 def minimize(pdb_path: str, max_iterations: int = 500) -> dict:
     from openmm import LangevinMiddleIntegrator, LocalEnergyMinimizer, unit
-    from openmm.app import Modeller, PDBFile, ForceField, Simulation
+    from openmm.app import Simulation
 
     ff, topology, positions = _prepare(pdb_path)
     system = ff.createSystem(
@@ -111,7 +111,7 @@ def minimize(pdb_path: str, max_iterations: int = 500) -> dict:
 def short_nvt(pdb_path: str, steps: int = 2000, report_every: int = 500) -> dict:
     """Picoseconds of Langevin dynamics at 300K; reports energy drift."""
     from openmm import LangevinMiddleIntegrator, unit
-    from openmm.app import Modeller, PDBFile, ForceField, Simulation
+    from openmm.app import Simulation
 
     ff, topology, positions = _prepare(pdb_path)
     system = ff.createSystem(
@@ -141,7 +141,9 @@ def short_nvt(pdb_path: str, steps: int = 2000, report_every: int = 500) -> dict
         "timestep_fs": TIMESTEP_FS,
         "temperature_k": TEMPERATURE_K,
         "energies_kj_mol": energies,
-        "energy_drift_kj_mol": round(energies[-1] - energies[0], 1),
+        "energy_drift_kj_mol": (
+            round(energies[-1] - energies[0], 1) if energies else None
+        ),
         "rmsd_to_start_nm": round(
             kabsch_rmsd(pos_start, _positions(sim.context)), 4
         ),

@@ -60,6 +60,8 @@ CA_CLOSE_A = 2.0
 
 def plddt_stats(pdb_path: str) -> dict:
     p = plddt_by_residue(pdb_path)
+    if not p:
+        raise ValueError(f"no CA atoms in {pdb_path} — not a protein PDB?")
     vals = np.array(list(p.values()))
     return {
         "n_residues": len(p),
