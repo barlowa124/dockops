@@ -13,15 +13,18 @@ for the backend interface, `src/dockops/benchmark.py` for the evaluation.
 - **Real and tested:** ligand SMILES → 3D embedding (RDKit ETKDG + MMFF) →
   PDBQT (Meeko), batch pipeline, FastAPI job service, benchmark metrics
   (ROC-AUC, enrichment factor), provenance manifests, Snakemake DAG, tests.
+- **Real benchmark staging:** `python -m dockops.fetch` pulls a DUD-E
+  target's actives/decoys (EGFR by default) plus its co-crystallized
+  receptor from RCSB; `receptor.box_from_ligand` derives the docking box
+  from the bound ligand rather than hand-typed coordinates.
 - **Deterministic mock engine:** `MockEngine` produces stable pseudo-scores
   seeded by input hash so the whole system runs end-to-end without a docking
   binary. Scores from it are pipeline-mechanics demonstrations, **not**
   docking results, and are labeled `engine: "mock"` everywhere they appear.
 - **Implemented, needs an environment:** `VinaEngine` is real code (ligand
   prep → maps → dock → affinity) but `vina` has no macOS arm64 wheel — it
-  runs in the Dockerfile/Linux or conda-forge; a receptor PDBQT + box config
-  are still needed (see `docs/engine-setup.md`). Benchmark dataset download
-  remains a stub — see `docs/datasources.md`.
+  runs in the Dockerfile/Linux or conda-forge; receptor PDBQT conversion
+  is still needed (see `docs/engine-setup.md`).
 
 ## Why
 
@@ -36,8 +39,10 @@ repeatable batch execution, and honest evaluation against benchmark sets
 config/config.yaml         endpoint-neutral config: targets, box params, engine selection
 workflow/Snakefile         fixture ligands -> embed -> dock (batch) -> benchmark metrics
 src/dockops/
-  targets.py               target registry (receptor file + box), config-driven
-  ligands.py               SMILES -> 3D conformer (ETKDG + MMFF), -> PDBQT (stub: meeko)
+  targets.py               target registry; box derived from co-crystallized ligand
+  receptor.py              ligand HETATM -> box center/size
+  fetch.py                 DUD-E actives/decoys + RCSB receptor staging
+  ligands.py               SMILES -> 3D conformer (ETKDG + MMFF) -> PDBQT (meeko)
   engine.py                DockingEngine protocol | MockEngine (real) | VinaEngine (stub)
   pipeline.py              batch docking -> scores.csv + provenance.json
   provenance.py            git sha, versions, input hashes, config hash
