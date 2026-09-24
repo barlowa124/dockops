@@ -37,8 +37,9 @@ rule benchmark:
 # Needs data/raw/receptor.pdb — run `python -m dockops.fetch` first.
 rule structure_qc:
     input:
-        "data/raw/receptor.pdb",
+        receptor="data/raw/receptor.pdb",
+        afdb="data/raw/afdb_model.pdb",
     output:
         "results/structure_qc.json",
     shell:
-        "{PY} -m dockops.structure_qc {input} data/raw/afdb_model.pdb {output}"
+        "{PY} -m dockops.structure_qc {input.receptor} {input.afdb} {output}"

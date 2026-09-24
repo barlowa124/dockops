@@ -10,7 +10,9 @@ production queue.
 
 from __future__ import annotations
 
+import hashlib
 import uuid
+from collections import OrderedDict
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -23,7 +25,8 @@ from dockops.util import load_config
 CONFIG_PATH = "config/config.yaml"
 
 app = FastAPI(title="dockops", version="0.1.0")
-_jobs: dict[str, dict] = {}
+_jobs: OrderedDict[str, dict] = OrderedDict()
+_MAX_JOBS = 10_000
 
 
 class JobRequest(BaseModel):
@@ -49,6 +52,10 @@ def submit_job(req: JobRequest) -> dict:
     engine = _engine()
     res = engine.dock(req.smiles, target)
     job_id = uuid.uuid4().hex[:12]
+    prov = manifest([], CONFIG_PATH, res.engine)
+    prov["request_sha256"] = hashlib.sha256(
+        f"{req.smiles}|{req.target}".encode()
+    ).hexdigest()
     record = {
         "job_id": job_id,
         "smiles": req.smiles,
@@ -56,9 +63,11 @@ def submit_job(req: JobRequest) -> dict:
         "score": res.score,
         "status": res.status,
         "engine": res.engine,
-        "provenance": manifest([], CONFIG_PATH, res.engine),
+        "provenance": prov,
     }
     _jobs[job_id] = record
+    while len(_jobs) > _MAX_JOBS:
+        _jobs.popitem(last=False)
     return record
 
 

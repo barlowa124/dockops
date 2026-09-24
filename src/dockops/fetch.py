@@ -19,7 +19,7 @@ import csv
 import sys
 import urllib.request
 
-import yaml
+from dockops.util import load_config
 
 DUDE_URL = "https://dude.docking.org/targets/{target}/{fname}"
 RCSB_URL = "https://files.rcsb.org/download/{pdb_id}.pdb"
@@ -79,9 +79,7 @@ def fetch(cfg: dict, out_csv: str, pdb_out: str) -> None:
 def main() -> None:
     out_csv = sys.argv[1] if len(sys.argv) > 1 else "data/raw/ligands_real.csv"
     pdb_out = sys.argv[2] if len(sys.argv) > 2 else "data/raw/receptor.pdb"
-    with open("config/config.yaml") as fh:
-        cfg = yaml.safe_load(fh)
-    fetch(cfg, out_csv, pdb_out)
+    fetch(load_config(), out_csv, pdb_out)
 
 
 if __name__ == "__main__":

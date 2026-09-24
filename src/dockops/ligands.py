@@ -18,7 +18,9 @@ def embed_smiles(smiles: str, seed: int = 0) -> Chem.Mol | None:
     if mol is None:
         return None
     mol = Chem.AddHs(mol)
-    if AllChem.EmbedMolecule(mol, AllChem.ETKDGv3()) != 0:
+    params = AllChem.ETKDGv3()
+    params.randomSeed = seed
+    if AllChem.EmbedMolecule(mol, params) != 0:
         return None
     if AllChem.MMFFHasAllMoleculeParams(mol):
         AllChem.MMFFOptimizeMolecule(mol)
@@ -42,6 +44,11 @@ def to_pdbqt(smiles: str, seed: int = 0) -> str | None:
     mol = embed_smiles(smiles, seed=seed)
     if mol is None:
         return None
+    # Meeko rejects multi-fragment molecules outright; salts/mixtures get
+    # their counterions stripped, keeping the largest fragment.
+    frags = Chem.GetMolFrags(mol, asMols=True)
+    if len(frags) > 1:
+        mol = max(frags, key=lambda m: m.GetNumHeavyAtoms())
     setups = MoleculePreparation().prepare(mol)
     if not setups:
         return None
