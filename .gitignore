@@ -8,7 +8,9 @@ __pycache__/
 
 # generated artifacts (small committed fixtures/results are un-ignored below)
 data/processed/*
+data/raw/*.pdb
 results/*
 !data/raw/ligands.csv
 !**/.gitkeep
 !results/metrics.json
+!results/structure_qc.json

@@ -17,6 +17,16 @@ for the backend interface, `src/dockops/benchmark.py` for the evaluation.
   target's actives/decoys (EGFR by default) plus its co-crystallized
   receptor from RCSB; `receptor.box_from_ligand` derives the docking box
   from the bound ligand rather than hand-typed coordinates.
+- **Structure readiness QC** (`dockops.structure_qc`, `[structure]` extra):
+  AFDB model fetch + pLDDT confidence + Cα agreement vs experiment
+  (numbering-offset aware), PDBFixer preparation, and OpenMM
+  implicit-solvent minimization. On EGFR it correctly flags that the
+  confident AF model's kinase domain deviates from the holo structure —
+  see `docs/structure-qc.md`.
+- **Variant scoring** (`dockops.variants`): ESM-2 zero-shot masked-marginal
+  mutation scores — variant prioritization, not de-novo design.
+- **Minimal MD** (`dockops.md`): OpenMM amber14 + GBn2 minimize / short NVT
+  with PDBFixer preparation — a mechanics check, honestly scoped.
 - **Deterministic mock engine:** `MockEngine` produces stable pseudo-scores
   seeded by input hash so the whole system runs end-to-end without a docking
   binary. Scores from it are pipeline-mechanics demonstrations, **not**

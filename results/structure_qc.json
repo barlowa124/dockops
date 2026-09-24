@@ -1,0 +1,25 @@
+{
+  "uniprot": "P00533",
+  "afdb_source": "https://alphafold.ebi.ac.uk/files/AF-P00533-F1-model_v6.pdb",
+  "afdb_plddt": {
+    "n_residues": 1210,
+    "mean_plddt": 75.95,
+    "frac_confident_70": 0.707,
+    "frac_very_high_90": 0.474,
+    "min_plddt": 23.8
+  },
+  "af_vs_experimental": {
+    "n_paired_residues": 312,
+    "numbering_offset": -24,
+    "ca_rmsd": 11.675,
+    "frac_ca_within_2a": 0.09,
+    "median_ca_dev": 4.56
+  },
+  "experimental_minimization": {
+    "n_atoms": 5327,
+    "pe_before_kj_mol": 2720389.3,
+    "pe_after_kj_mol": -45612.5,
+    "delta_pe_kj_mol": -2766001.8,
+    "rmsd_to_start_nm": 0.0791
+  }
+}

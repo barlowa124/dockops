@@ -28,6 +28,12 @@ vina = [
     "vina",
     "meeko",
 ]
+structure = [
+    "openmm",
+    "biopython",
+    "torch",
+    "transformers",
+]
 
 [tool.setuptools.packages.find]
 where = ["src"]
