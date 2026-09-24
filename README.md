@@ -1,7 +1,7 @@
 # dockops
 
 Docking as a service: a reproducible pipeline + API that turns a molecular
-docking tool into a reliable scientific workflow — ligand preparation, batch
+docking tool into a reliable scientific workflow covering ligand preparation, batch
 execution, benchmark evaluation, and provenance on every run.
 
 **2-minute tour:** [Status](#status) for what is real vs. stubbed,
@@ -15,32 +15,32 @@ for the backend interface, `src/dockops/benchmark.py` for the evaluation.
   (ROC-AUC, enrichment factor), provenance manifests, Snakemake DAG, tests.
 - **Real benchmark staging:** `python -m dockops.fetch` pulls a DUD-E
   target's actives/decoys (EGFR by default) plus its co-crystallized
-  receptor from RCSB; `receptor.box_from_ligand` derives the docking box
-  from the bound ligand rather than hand-typed coordinates.
+  receptor from RCSB. `receptor.box_from_ligand` derives the docking box
+  from the bound ligand, not hand-typed coordinates.
 - **Structure readiness QC** (`dockops.structure_qc`, `[structure]` extra):
   AFDB model fetch + pLDDT confidence + Cα agreement vs experiment
   (numbering-offset aware), PDBFixer preparation, and OpenMM
   implicit-solvent minimization. On EGFR it correctly flags that the
-  confident AF model's kinase domain deviates from the holo structure —
-  see `docs/structure-qc.md`.
+  confident AF model's kinase domain deviates from the holo structure (see
+  `docs/structure-qc.md`).
 - **Variant scoring** (`dockops.variants`): ESM-2 zero-shot masked-marginal
-  mutation scores — variant prioritization, not de-novo design.
+  mutation scores for variant prioritization, not de-novo design.
 - **Minimal MD** (`dockops.md`): OpenMM amber14 + GBn2 minimize / short NVT
-  with PDBFixer preparation — a mechanics check, honestly scoped.
+  with PDBFixer preparation, scoped as a mechanics check.
 - **Deterministic mock engine:** `MockEngine` produces stable pseudo-scores
   seeded by input hash so the whole system runs end-to-end without a docking
   binary. Scores from it are pipeline-mechanics demonstrations, **not**
   docking results, and are labeled `engine: "mock"` everywhere they appear.
 - **Implemented, needs an environment:** `VinaEngine` is real code (ligand
-  prep → maps → dock → affinity) but `vina` has no macOS arm64 wheel — it
-  runs in the Dockerfile/Linux or conda-forge; receptor PDBQT conversion
+  prep → maps → dock → affinity) but `vina` has no macOS arm64 wheel. It
+  runs in the Dockerfile/Linux or conda-forge. Receptor PDBQT conversion
   is still needed (see `docs/engine-setup.md`).
 
 ## Why
 
 Drug-discovery platforms need models and tools operationalized into
-dependable workflows, not notebooks: versioned inputs, recorded provenance,
-repeatable batch execution, and honest evaluation against benchmark sets
+dependable workflows, not notebooks. Versioned inputs, recorded provenance,
+repeatable batch execution, and evaluation against benchmark sets
 (actives vs. decoys). This repo is that pattern at small scale.
 
 ## Architecture
@@ -77,13 +77,13 @@ curl -X POST localhost:8000/jobs \
 
 ## Limitations
 
-- Mock-engine scores carry no physical meaning; the repo claims workflow
+- Mock-engine scores carry no physical meaning. The repo claims workflow
   correctness, not docking accuracy, until `VinaEngine` lands and the
   benchmark runs on a real backend against a real benchmark set.
-- The bundled fixture labels are illustrative — they exercise the benchmark
+- The bundled fixture labels are illustrative. They exercise the benchmark
   code path and are not an enrichment claim.
-- Research/education only; not for any regulated or clinical use.
+- Research/education only. Not for any regulated or clinical use.
 
 ## License
 
-MIT — see LICENSE.
+MIT (see LICENSE).
