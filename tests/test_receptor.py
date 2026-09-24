@@ -46,12 +46,7 @@ class ReceptorTests(unittest.TestCase):
         # extent 4 on x and y, 0 on z, + 2*padding each side
         self.assertEqual(size, (14.0, 14.0, 10.0))
 
-
-if __name__ == "__main__":
-    unittest.main()
-
     def test_multi_site_resname_rejected(self):
-        import unittest
         # same resname at two different (chain, resseq) sites -> ambiguous box
         pdb = (
             _het(1, "LIG", 10.0, 20.0, 30.0)
@@ -64,3 +59,7 @@ if __name__ == "__main__":
         tmp.close()
         with self.assertRaises(ValueError):
             ligand_atoms(tmp.name, "LIG")
+
+
+if __name__ == "__main__":
+    unittest.main()

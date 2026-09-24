@@ -70,10 +70,6 @@ class AlphaFoldTests(unittest.TestCase):
         self.assertEqual(r["n_paired_residues"], 20)
         self.assertAlmostEqual(r["ca_rmsd"], 0.0, places=3)
 
-
-if __name__ == "__main__":
-    unittest.main()
-
     def test_plddt_stats_rejects_no_ca(self):
         with self.assertRaises(ValueError):
             plddt_stats(_pdb([
@@ -87,5 +83,9 @@ if __name__ == "__main__":
         )
         good = _atom(2, 2, 1.0, 0.0, 0.0, 80.0)
         stats = plddt_stats(_pdb([short, good]))
-        assert stats["n_residues"] == 2
-        assert stats["mean_plddt"] == 80.0
+        self.assertEqual(stats["n_residues"], 2)
+        self.assertEqual(stats["mean_plddt"], 80.0)
+
+
+if __name__ == "__main__":
+    unittest.main()
