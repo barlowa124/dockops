@@ -19,6 +19,8 @@ from pathlib import Path
 
 import numpy as np
 
+from dockops.pdb import ca_records, records
+
 AFDB_URL = "https://alphafold.ebi.ac.uk/files/AF-{uniprot}-F1-model_{ver}.pdb"
 VERSIONS = ["v6", "v4"]
 
@@ -42,12 +44,18 @@ def fetch_afdb(uniprot: str, out_path: str) -> str:
 
 def plddt_by_residue(pdb_path: str) -> dict[int, float]:
     """pLDDT per residue, read from the B-factor column of CA atoms."""
-    out = {}
-    with open(pdb_path) as f:
-        for line in f:
-            if line.startswith("ATOM") and line[12:16].strip() == "CA":
-                out[int(line[22:26])] = float(line[60:66])
-    return out
+    return {
+        r["resseq"]: r["bfactor"]
+        for r in records(pdb_path)
+        if r["atom"] == "CA"
+    }
+
+
+# AlphaFold confidence bands (EBI convention): >=70 confident, >=90 very high
+PLDDT_CONFIDENT = 70.0
+PLDDT_VERY_HIGH = 90.0
+# Cα agreement cutoff: <2 Å after superposition counts as fold-level match
+CA_CLOSE_A = 2.0
 
 
 def plddt_stats(pdb_path: str) -> dict:
@@ -56,29 +64,15 @@ def plddt_stats(pdb_path: str) -> dict:
     return {
         "n_residues": len(p),
         "mean_plddt": round(float(vals.mean()), 2),
-        "frac_confident_70": round(float((vals >= 70).mean()), 3),
-        "frac_very_high_90": round(float((vals >= 90).mean()), 3),
+        "frac_confident_70": round(float((vals >= PLDDT_CONFIDENT).mean()), 3),
+        "frac_very_high_90": round(float((vals >= PLDDT_VERY_HIGH).mean()), 3),
         "min_plddt": round(float(vals.min()), 1),
     }
 
 
 def _ca_records(pdb_path: str) -> dict[int, tuple[str, np.ndarray]]:
     """resseq -> (resname, coords) for CA atoms."""
-    out = {}
-    with open(pdb_path) as f:
-        for line in f:
-            if line.startswith("ATOM") and line[12:16].strip() == "CA":
-                out[int(line[22:26])] = (
-                    line[17:20].strip(),
-                    np.array(
-                        [
-                            float(line[30:38]),
-                            float(line[38:46]),
-                            float(line[46:54]),
-                        ]
-                    ),
-                )
-    return out
+    return ca_records(pdb_path)
 
 
 def _best_offset(a: dict, b: dict) -> tuple[int, int]:
@@ -149,7 +143,7 @@ def ca_rmsd(pdb_a: str, pdb_b: str) -> dict:
         "n_paired_residues": len(pairs),
         "numbering_offset": d,
         "ca_rmsd": round(float(np.sqrt((dev**2).mean())), 3),
-        "frac_ca_within_2a": round(float((dev < 2.0).mean()), 3),
+        "frac_ca_within_2a": round(float((dev < CA_CLOSE_A).mean()), 3),
         "median_ca_dev": round(float(np.median(dev)), 3),
     }
 

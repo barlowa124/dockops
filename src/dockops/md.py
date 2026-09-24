@@ -12,6 +12,15 @@ import sys
 
 import numpy as np
 
+# GBn2 implicit-solvent protocol constants (standard OBC2 defaults)
+SOLUTE_DIELECTRIC = 1.0
+SOLVENT_DIELECTRIC = 78.5  # water
+TEMPERATURE_K = 300
+FRICTION_PS_INV = 1.0      # Langevin collision rate, per-picosecond
+TIMESTEP_FS = 1.0
+MINIMIZE_TIMESTEP_FS = 2.0
+PROTONATION_PH = 7.0
+
 
 def _positions(context) -> np.ndarray:
     from openmm import unit
@@ -53,7 +62,7 @@ def _prepare(pdb_path: str):
         fixer.findMissingAtoms()
         fixer.addMissingAtoms()
         ff = ForceField(*ff_file)
-        fixer.addMissingHydrogens(7.0)
+        fixer.addMissingHydrogens(PROTONATION_PH)
         return ff, fixer.topology, fixer.positions
     except ImportError:
         ff = ForceField(*ff_file)
@@ -68,13 +77,18 @@ def minimize(pdb_path: str, max_iterations: int = 500) -> dict:
 
     ff, topology, positions = _prepare(pdb_path)
     system = ff.createSystem(
-        topology, soluteDielectric=1.0, solventDielectric=78.5
+        topology,
+        soluteDielectric=SOLUTE_DIELECTRIC,
+        solventDielectric=SOLVENT_DIELECTRIC,
     )
     sim = Simulation(
         topology,
         system,
-        LangevinMiddleIntegrator(300 * unit.kelvin, 1 / unit.picosecond,
-                                 2 * unit.femtoseconds),
+        LangevinMiddleIntegrator(
+            TEMPERATURE_K * unit.kelvin,
+            FRICTION_PS_INV / unit.picosecond,
+            MINIMIZE_TIMESTEP_FS * unit.femtoseconds,
+        ),
     )
     sim.context.setPositions(positions)
     pe_before = _potential(sim.context)
@@ -101,10 +115,14 @@ def short_nvt(pdb_path: str, steps: int = 2000, report_every: int = 500) -> dict
 
     ff, topology, positions = _prepare(pdb_path)
     system = ff.createSystem(
-        topology, soluteDielectric=1.0, solventDielectric=78.5
+        topology,
+        soluteDielectric=SOLUTE_DIELECTRIC,
+        solventDielectric=SOLVENT_DIELECTRIC,
     )
     integrator = LangevinMiddleIntegrator(
-        300 * unit.kelvin, 1 / unit.picosecond, 1 * unit.femtoseconds
+        TEMPERATURE_K * unit.kelvin,
+        FRICTION_PS_INV / unit.picosecond,
+        TIMESTEP_FS * unit.femtoseconds,
     )
     sim = Simulation(topology, system, integrator)
     sim.context.setPositions(positions)
@@ -120,8 +138,8 @@ def short_nvt(pdb_path: str, steps: int = 2000, report_every: int = 500) -> dict
 
     return {
         "steps": steps,
-        "timestep_fs": 1.0,
-        "temperature_k": 300,
+        "timestep_fs": TIMESTEP_FS,
+        "temperature_k": TEMPERATURE_K,
         "energies_kj_mol": energies,
         "energy_drift_kj_mol": round(energies[-1] - energies[0], 1),
         "rmsd_to_start_nm": round(

@@ -8,23 +8,16 @@ constant from config.
 
 from __future__ import annotations
 
+from dockops.pdb import records
+
 
 def ligand_atoms(pdb_path: str, resname: str) -> list[tuple[float, float, float]]:
     """3D coordinates of all HETATM atoms belonging to resname."""
-    coords = []
-    with open(pdb_path) as f:
-        for line in f:
-            if not line.startswith("HETATM"):
-                continue
-            if line[17:20].strip() != resname:
-                continue
-            coords.append(
-                (
-                    float(line[30:38]),
-                    float(line[38:46]),
-                    float(line[46:54]),
-                )
-            )
+    coords = [
+        tuple(r["coords"])
+        for r in records(pdb_path, kinds=("HETATM",))
+        if r["resname"] == resname
+    ]
     if not coords:
         raise ValueError(f"no HETATM atoms for resname {resname!r} in {pdb_path}")
     return coords
