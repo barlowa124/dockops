@@ -4,8 +4,9 @@ DockingEngine is the seam every backend implements. MockEngine is real code
 with fake physics: deterministic pseudo-scores seeded by (smiles, target),
 used so the pipeline, API, and tests run without a docking binary. Its scores
 are labeled engine="mock" everywhere and must never be presented as docking
-results. VinaEngine is the intended real backend — currently a stub pending
-receptor prep + meeko (docs/engine-setup.md).
+results. VinaEngine is the real backend (meeko ligand prep + Vina scoring);
+it needs the `vina`/`meeko` packages and a prepared receptor PDBQT —
+see docs/engine-setup.md.
 """
 
 from __future__ import annotations

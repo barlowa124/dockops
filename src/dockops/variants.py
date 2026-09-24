@@ -47,8 +47,14 @@ class ESM2Scorer:
 
     def score(self, seq: str, pos: int, mut: str) -> dict:
         """Score mut at 1-based residue position pos of seq."""
+        if not 1 <= pos <= len(seq):
+            raise ValueError(f"pos {pos} out of range for len {len(seq)}")
+        if mut not in AA:
+            raise ValueError(f"not a standard amino acid: {mut!r}")
         i = pos - 1
         wt = seq[i]
+        if wt not in AA:
+            raise ValueError(f"non-standard residue at pos {pos}: {wt!r}")
         lp = self._logprobs_at(seq, i)
         wt_id = self.tok.convert_tokens_to_ids(wt)
         mut_id = self.tok.convert_tokens_to_ids(mut)
