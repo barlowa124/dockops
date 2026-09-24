@@ -1,0 +1,17 @@
+engine: "mock"            # mock | vina
+
+targets:
+  demo_target:
+    receptor_pdbqt: "data/raw/receptor.pdbqt"   # TODO: absent until real prep; mock ignores
+    box_center: [0.0, 0.0, 0.0]                  # placeholder; replace per target
+    box_size: [22.5, 22.5, 22.5]
+    description: "Illustrative target for pipeline smoke tests"
+
+benchmark:
+  ligands_csv: "data/raw/ligands.csv"           # committed fixture (illustrative labels)
+  label_col: "label"                            # 1 = active, 0 = decoy (illustrative)
+  ef_fractions: [0.01, 0.05]
+
+paths:
+  processed_dir: "data/processed"
+  results_dir: "results"

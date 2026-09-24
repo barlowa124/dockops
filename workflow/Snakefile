@@ -1,0 +1,33 @@
+import sys
+
+configfile: "config/config.yaml"
+
+PY = sys.executable  # the interpreter running snakemake; keeps the DAG on the project venv
+
+LIGANDS = config["benchmark"]["ligands_csv"]
+TARGET = "demo_target"
+
+
+rule all:
+    input:
+        "results/metrics.json",
+
+
+rule dock:
+    input:
+        LIGANDS,
+    output:
+        scores="data/processed/scores.csv",
+        provenance="data/processed/provenance.json",
+    shell:
+        "{PY} -m dockops.pipeline {input} {TARGET} {output.scores} {output.provenance}"
+
+
+rule benchmark:
+    input:
+        scores="data/processed/scores.csv",
+        ligands=LIGANDS,
+    output:
+        "results/metrics.json",
+    shell:
+        "{PY} -m dockops.benchmark {input.scores} {input.ligands} {output}"

@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+*.egg-info/
+.venv/
+.pytest_cache/
+.ipynb_checkpoints/
+.snakemake/
+
+# generated artifacts (small committed fixtures/results are un-ignored below)
+data/processed/*
+results/*
+!data/raw/ligands.csv
+!**/.gitkeep
+!results/metrics.json
