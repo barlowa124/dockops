@@ -26,6 +26,10 @@ VERSIONS = ["v6", "v4"]
 
 
 def fetch_afdb(uniprot: str, out_path: str) -> str:
+    if Path(out_path).exists():
+        # a staged model is pinned evidence; do not silently re-fetch a
+        # possibly different AFDB version over it
+        return f"staged:{out_path}"
     for ver in VERSIONS:
         url = AFDB_URL.format(uniprot=uniprot, ver=ver)
         try:

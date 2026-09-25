@@ -60,8 +60,11 @@ def run_batch(
     Path(out_csv).parent.mkdir(parents=True, exist_ok=True)
     out.to_csv(out_csv, index=False)
 
+    inputs = [ligands_csv]
+    if target.receptor_pdbqt and Path(target.receptor_pdbqt).exists():
+        inputs.append(target.receptor_pdbqt)
     write_manifest(
-        manifest([ligands_csv], config_path, engine.name)
+        manifest(inputs, config_path, engine.name)
         | {"target": target_name, "n_ligands": len(out)},
         provenance_out,
     )
