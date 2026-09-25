@@ -28,7 +28,7 @@ answering "is this receptor model defensible to dock into?":
 - Minimization: +2.7M → -45.6k kJ/mol (PDBFixer-repaired clashes resolved
   in implicit solvent), RMSD 0.08 nm, so mechanics behave as expected.
 
-## Scope honesty
+## Scope
 
 - The MD stage is a mechanics check (picoseconds, implicit solvent), not a
   conformational study.

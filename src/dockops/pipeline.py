@@ -1,7 +1,7 @@
 """Batch docking pipeline: ligands x target -> scores.csv + provenance.json.
 
-Each ligand is 3D-embedded (rdkit) before docking so failures are split
-honestly: unprepared ligands are marked "unprepared", engine failures "error",
+Each ligand is 3D-embedded (rdkit) before docking so failures stay
+visible: unprepared ligands are marked "unprepared", engine failures "error",
 successes "ok". Nothing is silently dropped.
 """
 

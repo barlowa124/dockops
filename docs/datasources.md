@@ -18,7 +18,7 @@ the run provenance; do not report enrichment on the bundled fixture.
 ## LIT-PCBA
 
 - Higher-quality, less-biased successor benchmark (15 targets, actives from
-  real screens + matched inactives). Preferred over DUD-E for honest numbers.
+  real screens + matched inactives). Preferred over DUD-E as the less-biased benchmark.
 - Distributed via the authors' GitHub / the LIT-PCBA site.
 
 ## Receptor structures
