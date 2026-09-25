@@ -14,8 +14,10 @@ RDLogger.DisableLog("rdApp.*")
 
 def embed_smiles(smiles: str, seed: int = 0) -> Chem.Mol | None:
     """Return a 3D-embedded, MMFF-minimized mol, or None on failure."""
+    if not smiles or not isinstance(smiles, str):
+        return None  # None -> C++ TypeError; "" parses to a zero-atom mol
     mol = Chem.MolFromSmiles(smiles)
-    if mol is None:
+    if mol is None or mol.GetNumAtoms() == 0:
         return None
     mol = Chem.AddHs(mol)
     params = AllChem.ETKDGv3()
