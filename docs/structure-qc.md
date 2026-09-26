@@ -25,8 +25,8 @@ answering "is this receptor model defensible to dock into?":
   structure (1M17), not this AF model. Confident pLDDT does not guarantee
   the holo conformation. That is precisely the decision this stage exists
   to automate.
-- Minimization: +2.7M → -45.6k kJ/mol (PDBFixer-repaired clashes resolved
-  in implicit solvent), RMSD 0.08 nm, so mechanics behave as expected.
+- Minimization: +240.8M → -45.2k kJ/mol (PDBFixer-repaired clashes resolved
+  in implicit solvent), RMSD 0.086 nm, so mechanics behave as expected.
 
 ## Scope
 
