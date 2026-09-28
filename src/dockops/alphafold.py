@@ -36,7 +36,7 @@ def fetch_afdb(uniprot: str, out_path: str) -> str:
             req = urllib.request.Request(
                 url, headers={"User-Agent": "dockops/0.1"}
             )
-            with urllib.request.urlopen(req, timeout=120) as r, open(
+            with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT_S) as r, open(
                 out_path, "wb"
             ) as f:
                 f.write(r.read())
@@ -56,6 +56,8 @@ def plddt_by_residue(pdb_path: str) -> dict[int, float]:
 
 
 # AlphaFold confidence bands (EBI convention): >=70 confident, >=90 very high
+DOWNLOAD_TIMEOUT_S = 120
+
 PLDDT_CONFIDENT = 70.0
 PLDDT_VERY_HIGH = 90.0
 # Cα agreement cutoff: <2 Å after superposition counts as fold-level match

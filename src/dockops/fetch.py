@@ -38,9 +38,12 @@ def parse_ism(text: str, label: int) -> list[tuple[str, str, int]]:
     return rows
 
 
+DOWNLOAD_TIMEOUT_S = 120
+
+
 def _download(url: str) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": "dockops/0.1"})
-    with urllib.request.urlopen(req, timeout=120) as r:
+    with urllib.request.urlopen(req, timeout=DOWNLOAD_TIMEOUT_S) as r:
         return r.read()
 
 
