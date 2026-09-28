@@ -2,7 +2,7 @@
 
 Docking as a service: a reproducible pipeline + API that turns a molecular
 docking tool into a reliable scientific workflow covering ligand preparation, batch
-execution, benchmark evaluation, and provenance on every run.
+execution, benchmark evaluation and provenance on every run.
 
 **2-minute tour:** [Status](#status) for what is real vs. stubbed,
 [Architecture](#architecture) for the moving parts, `src/dockops/engine.py`
@@ -20,7 +20,7 @@ for the backend interface, `src/dockops/benchmark.py` for the evaluation.
   `snakemake results/metrics_real.json` then exercises the batch path on
   the real cohort (3,542 ligands: 3541 embedded, 1 unprepared with the
   failure visible in `scores_real.csv`; committed metrics are labeled
-  `engine: "mock"` — mechanics evidence, not an enrichment claim).
+  `engine: "mock"`, mechanics evidence rather than an enrichment claim).
 - **Structure readiness QC** (`dockops.structure_qc`, `[structure]` extra):
   AFDB model fetch + pLDDT confidence + Cα agreement vs experiment
   (numbering-offset aware), PDBFixer preparation, and OpenMM

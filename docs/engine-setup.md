@@ -41,5 +41,5 @@ is real, the affinities are not.
 Per ligand: SMILES → RDKit ETKDG+MMFF 3D → meeko PDBQT →
 `Vina(sf_name="vina", seed)` → `set_receptor` → `compute_vina_maps(box)` →
 `dock(exhaustiveness, n_poses=1)` → `energies()[0][0]` affinity. Missing
-receptor files and unembeddable ligands return error/unprepared statuses —
-they do not raise.
+receptor files and unembeddable ligands return error/unprepared statuses.
+They do not raise.
