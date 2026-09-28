@@ -88,6 +88,11 @@ curl -X POST localhost:8000/jobs \
   code path and are not an enrichment claim.
 - Research/education only. Not for any regulated or clinical use.
 
+
+## Related work
+
+- [lab-instrument-gateway](https://github.com/barlowa124/lab-instrument-gateway) is the same lab-software pattern at the instrument layer: typed interfaces, provenance on every record, fault injection for failure-path tests.
+
 ## License
 
 MIT (see LICENSE).
