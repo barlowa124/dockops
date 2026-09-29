@@ -1,3 +1,7 @@
+> **This repository has moved.** Active development continues in [barlowa124/mol-ml](https://github.com/barlowa124/mol-ml) under [`dockops/`](https://github.com/barlowa124/mol-ml/tree/main/dockops). This repo is archived and kept for link stability.
+
+---
+
 # dockops
 
 Docking as a service: a reproducible pipeline + API that turns a molecular
