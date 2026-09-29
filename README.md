@@ -19,8 +19,8 @@ for the backend interface, `src/dockops/benchmark.py` for the evaluation.
   from the bound ligand, not hand-typed coordinates.
   `snakemake results/metrics_real.json` then exercises the batch path on
   the real cohort (3,542 ligands: 3541 embedded, 1 unprepared with the
-  failure visible in `scores_real.csv`; committed metrics are labeled
-  `engine: "mock"`, mechanics evidence rather than an enrichment claim).
+  failure visible in `scores_real.csv`. Committed metrics are labeled
+  `engine: "mock"`, mechanics evidence, not an enrichment claim).
 - **Structure readiness QC** (`dockops.structure_qc`, `[structure]` extra):
   AFDB model fetch + pLDDT confidence + Cα agreement vs experiment
   (numbering-offset aware), PDBFixer preparation, and OpenMM
